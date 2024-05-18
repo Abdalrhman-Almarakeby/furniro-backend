@@ -10,6 +10,7 @@ import {
 import { ObjectIdValidationPipe } from 'src/pipes/object-id-validation.pipe';
 import { UserService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -33,7 +34,7 @@ export class UsersController {
   @Patch(':id')
   update(
     @Param('id', ObjectIdValidationPipe) id: string,
-    @Body() updateUserDto: CreateUserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(id, updateUserDto);
   }
