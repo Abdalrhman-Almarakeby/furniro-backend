@@ -2,11 +2,12 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Param,
   Patch,
   Delete,
+  Body,
+  Param,
 } from '@nestjs/common';
+import { ObjectIdValidationPipe } from 'src/pipes/object-id-validation.pipe';
 import { UserService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -20,7 +21,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ObjectIdValidationPipe) id: string) {
     return this.userService.findOne(id);
   }
 
@@ -30,12 +31,15 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: CreateUserDto) {
+  update(
+    @Param('id', ObjectIdValidationPipe) id: string,
+    @Body() updateUserDto: CreateUserDto,
+  ) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ObjectIdValidationPipe) id: string) {
     return this.userService.remove(id);
   }
 }
