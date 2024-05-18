@@ -8,6 +8,12 @@ export class User {
   @Prop()
   name: string;
 
+  @Prop({ unique: true })
+  email: string;
+
+  @Prop()
+  password: string;
+
   @Prop()
   age: number;
 }
@@ -21,6 +27,7 @@ UserSchema.virtual('id').get(function () {
 UserSchema.set('toJSON', {
   virtuals: true,
 });
+
 UserSchema.set('toObject', {
   virtuals: true,
 });
