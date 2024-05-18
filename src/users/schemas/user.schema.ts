@@ -12,4 +12,17 @@ export class User {
   age: number;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
+
+UserSchema.set('toJSON', {
+  virtuals: true,
+});
+UserSchema.set('toObject', {
+  virtuals: true,
+});
+
+export { UserSchema };
