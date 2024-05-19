@@ -17,30 +17,40 @@ export class UsersController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    const users = await this.userService.findAll();
+
+    return users.map(this.userService.removePassword);
   }
 
   @Get(':id')
-  findOne(@Param('id', ObjectIdValidationPipe) id: string) {
-    return this.userService.findOne(id);
+  async findOne(@Param('id', ObjectIdValidationPipe) id: string) {
+    const user = await this.userService.findOne(id);
+
+    return this.userService.removePassword(user);
   }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
+
+    return this.userService.removePassword(user);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ObjectIdValidationPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.update(id, updateUserDto);
+    const user = await this.userService.update(id, updateUserDto);
+
+    return this.userService.removePassword(user);
   }
 
   @Delete(':id')
-  remove(@Param('id', ObjectIdValidationPipe) id: string) {
-    return this.userService.remove(id);
+  async remove(@Param('id', ObjectIdValidationPipe) id: string) {
+    const user = await this.userService.remove(id);
+
+    return this.userService.removePassword(user);
   }
 }
