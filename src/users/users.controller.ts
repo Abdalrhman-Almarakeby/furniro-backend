@@ -1,5 +1,14 @@
-import { Controller, Get, Patch, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 import { ObjectIdValidationPipe } from 'src/pipes/object-id-validation.pipe';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -14,6 +23,7 @@ export class UsersController {
     return users.map(this.userService.removePassword);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id', ObjectIdValidationPipe) id: string) {
     const user = await this.userService.findOne(id);
@@ -21,6 +31,7 @@ export class UsersController {
     return this.userService.removePassword(user);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
     @Param('id', ObjectIdValidationPipe) id: string,
@@ -31,6 +42,7 @@ export class UsersController {
     return this.userService.removePassword(user);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id', ObjectIdValidationPipe) id: string) {
     const user = await this.userService.remove(id);
