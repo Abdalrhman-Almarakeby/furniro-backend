@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Body,
-  Param,
-} from '@nestjs/common';
+import { Controller, Get, Patch, Delete, Body, Param } from '@nestjs/common';
 import { ObjectIdValidationPipe } from 'src/pipes/object-id-validation.pipe';
 import { UserService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
@@ -26,13 +17,6 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id', ObjectIdValidationPipe) id: string) {
     const user = await this.userService.findOne(id);
-
-    return this.userService.removePassword(user);
-  }
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.userService.create(createUserDto);
 
     return this.userService.removePassword(user);
   }
