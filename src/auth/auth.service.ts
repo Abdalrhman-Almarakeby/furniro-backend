@@ -1,8 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { UserService } from 'src/users/users.service';
 import { PasswordService } from 'src/password/password.service';
 import { LoginDto } from './dto/login.dto';
+import { UserWithoutPassword } from 'src/users/schemas/user.schema';
+
+type Payload = {
+  email: string;
+  sub: UserWithoutPassword;
+};
 
 @Injectable()
 export class AuthService {
@@ -12,7 +18,27 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private async validatedUser(loginData: LoginDto) {
+  private accessTokenOptions: JwtSignOptions = {
+    expiresIn: '1h',
+    secret: process.env.JWT_SECRET_KEY,
+  };
+
+  private refreshTokenOptions: JwtSignOptions = {
+    expiresIn: '30d',
+    secret: process.env.JWT_REFRESH_TOKEN_SECRET_KEY,
+  };
+
+  private async generateAccessToken(payload: Payload): Promise<string> {
+    return this.jwtService.signAsync(payload, this.accessTokenOptions);
+  }
+
+  private async generateRefreshToken(payload: Payload): Promise<string> {
+    return this.jwtService.signAsync(payload, this.refreshTokenOptions);
+  }
+
+  private async validatedUser(
+    loginData: LoginDto,
+  ): Promise<UserWithoutPassword> {
     const user = await this.userService.findOneByEmail(loginData.email);
     const isCorrectPassword = await this.passwordService.verifyPassword(
       loginData.password,
@@ -26,7 +52,13 @@ export class AuthService {
     return this.userService.removePassword(user);
   }
 
-  async login(loginData: LoginDto) {
+  async login(loginData: LoginDto): Promise<{
+    user: UserWithoutPassword;
+    tokens: {
+      accessToken: string;
+      refreshToken: string;
+    };
+  }> {
     const user = await this.validatedUser(loginData);
 
     const payload = {
@@ -34,23 +66,8 @@ export class AuthService {
       sub: user,
     };
 
-    const accessTokenOptions = {
-      expiresIn: '1h',
-      secret: process.env.JWT_SECRET_KEY,
-    };
-    const refreshTokenOptions = {
-      expiresIn: '30d',
-      secret: process.env.JWT_REFRESH_TOKEN_SECRET_KEY,
-    };
-
-    const accessToken = await this.jwtService.signAsync(
-      payload,
-      accessTokenOptions,
-    );
-    const refreshToken = await this.jwtService.signAsync(
-      payload,
-      refreshTokenOptions,
-    );
+    const accessToken = await this.generateAccessToken(payload);
+    const refreshToken = await this.generateRefreshToken(payload);
 
     return {
       user,
@@ -58,6 +75,24 @@ export class AuthService {
         accessToken,
         refreshToken,
       },
+    };
+  }
+
+  async refreshToken(requestPayload: Payload): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
+    const payload = {
+      email: requestPayload.email,
+      sub: requestPayload.sub,
+    };
+
+    const accessToken = await this.generateAccessToken(payload);
+    const refreshToken = await this.generateRefreshToken(payload);
+
+    return {
+      accessToken,
+      refreshToken,
     };
   }
 }
