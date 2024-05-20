@@ -8,6 +8,7 @@ import { EnvironmentVariables } from './config.dto';
   imports: [
     NestConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
       validate: (config) => {
         const validatedConfig = plainToInstance(EnvironmentVariables, config, {
           enableImplicitConversion: true,
