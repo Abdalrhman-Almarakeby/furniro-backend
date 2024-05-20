@@ -18,7 +18,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService<ConfigVariables>,
+    private readonly configService: ConfigService<ConfigVariables, true>,
   ) {}
 
   private accessTokenOptions: JwtSignOptions = {

@@ -13,7 +13,7 @@ import { ConfigVariables } from 'src/config/config.interface';
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService<ConfigVariables>,
+    private readonly configService: ConfigService<ConfigVariables, true>,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
