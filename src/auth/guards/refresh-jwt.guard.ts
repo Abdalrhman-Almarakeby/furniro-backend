@@ -4,9 +4,9 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 import { ConfigVariables } from 'src/config/config.interface';
 
 @Injectable()
@@ -20,7 +20,9 @@ export class RefreshJwtGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
-    if (!token) throw new UnauthorizedException();
+    if (!token) {
+      throw new UnauthorizedException('Missing refresh token');
+    }
 
     try {
       const payload = await this.jwtService.verifyAsync(token, {
@@ -29,7 +31,7 @@ export class RefreshJwtGuard implements CanActivate {
 
       request.user = payload;
     } catch (err) {
-      throw new UnauthorizedException(err);
+      throw new UnauthorizedException('Missing or invalid refresh token');
     }
 
     return true;
