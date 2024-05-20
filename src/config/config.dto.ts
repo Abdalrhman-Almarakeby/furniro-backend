@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, IsBoolean } from 'class-validator';
 import { ConfigVariables } from './config.interface';
 
 export class EnvironmentVariables implements ConfigVariables {
@@ -31,4 +31,23 @@ export class EnvironmentVariables implements ConfigVariables {
   @IsString()
   @IsNotEmpty()
   JWT_REFRESH_TOKEN_SECRET_KEY: string;
+
+  // Email Service
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_HOST: string;
+
+  @IsInt()
+  EMAIL_PORT: number;
+
+  @IsBoolean()
+  EMAIL_SECURE: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_USERNAME: string;
+
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_PASSWORD: string;
 }

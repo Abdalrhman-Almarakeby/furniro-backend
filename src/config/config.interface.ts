@@ -9,4 +9,11 @@ export interface ConfigVariables {
   // JWT secret keys
   JWT_SECRET_KEY: string;
   JWT_REFRESH_TOKEN_SECRET_KEY: string;
+
+  // Email Service
+  EMAIL_HOST: string;
+  EMAIL_PORT: number;
+  EMAIL_SECURE: boolean;
+  EMAIL_USERNAME: string;
+  EMAIL_PASSWORD: string;
 }
