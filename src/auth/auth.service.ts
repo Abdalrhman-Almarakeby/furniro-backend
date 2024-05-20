@@ -1,5 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { ConfigVariables } from 'src/config/config.interface';
 import { UserService } from 'src/users/users.service';
 import { PasswordService } from 'src/password/password.service';
 import { LoginDto } from './dto/login.dto';
@@ -16,16 +18,17 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService<ConfigVariables>,
   ) {}
 
   private accessTokenOptions: JwtSignOptions = {
     expiresIn: '1h',
-    secret: process.env.JWT_SECRET_KEY,
+    secret: this.configService.get<string>('JWT_SECRET_KEY'),
   };
 
   private refreshTokenOptions: JwtSignOptions = {
     expiresIn: '30d',
-    secret: process.env.JWT_REFRESH_TOKEN_SECRET_KEY,
+    secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET_KEY'),
   };
 
   private async generateAccessToken(payload: Payload): Promise<string> {
