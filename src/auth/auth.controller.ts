@@ -1,11 +1,11 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UserService } from 'src/users/users.service';
-import { LoginDto } from './dto/login.dto';
-import { RefreshJwtGuard } from './guards/refresh-jwt.guard';
 import { Request as RequestType } from 'express';
+import { AuthService } from './auth.service';
+import { UserService } from 'src/users/users.service';
+import { RefreshJwtGuard } from './guards/refresh-jwt.guard';
 import { UserWithoutPassword } from 'src/users/schemas/user.schema';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,20 +15,28 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
+  async register(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<UserWithoutPassword> {
     const user = await this.userService.create(createUserDto);
 
     return this.userService.removePassword(user);
   }
 
   @Post('login')
-  login(@Body() LoginData: LoginDto) {
+  async login(@Body() LoginData: LoginDto): Promise<{
+    user: UserWithoutPassword;
+    tokens: {
+      accessToken: string;
+      refreshToken: string;
+    };
+  }> {
     return this.authService.login(LoginData);
   }
 
   @UseGuards(RefreshJwtGuard)
   @Post('refresh')
-  refreshToken(
+  async refreshToken(
     @Request()
     req: RequestType & {
       user: {
@@ -36,7 +44,10 @@ export class AuthController {
         sub: UserWithoutPassword;
       };
     },
-  ) {
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
     return this.authService.refreshToken(req.user);
   }
 }
