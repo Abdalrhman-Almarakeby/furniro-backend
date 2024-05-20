@@ -1,8 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-type UserDocument = HydratedDocument<User>;
-
 @Schema()
 class User {
   @Prop()
@@ -17,6 +15,8 @@ class User {
   @Prop()
   age: number;
 }
+
+type UserDocument = HydratedDocument<User>;
 
 type UserWithoutPassword = Omit<User, 'password'>;
 
