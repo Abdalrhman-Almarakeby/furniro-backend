@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type UserDocument = HydratedDocument<User>;
+type UserDocument = HydratedDocument<User>;
 
 @Schema()
-export class User {
+class User {
   @Prop()
   name: string;
 
@@ -17,6 +17,8 @@ export class User {
   @Prop()
   age: number;
 }
+
+type UserWithoutPassword = Omit<User, 'password'>;
 
 const UserSchema = SchemaFactory.createForClass(User);
 
@@ -32,4 +34,4 @@ UserSchema.set('toObject', {
   virtuals: true,
 });
 
-export { UserSchema };
+export { User, UserDocument, UserWithoutPassword, UserSchema };
