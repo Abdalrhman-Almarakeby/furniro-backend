@@ -16,4 +16,8 @@ export interface ConfigVariables {
   EMAIL_SECURE: boolean;
   EMAIL_USERNAME: string;
   EMAIL_PASSWORD: string;
+
+  // Pages and links
+  DOMAIN_NAME_URL: string;
+  VERIFY_EMAIL_REDIRECT_LINK: string;
 }

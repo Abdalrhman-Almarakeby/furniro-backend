@@ -50,4 +50,13 @@ export class EnvironmentVariables implements ConfigVariables {
   @IsString()
   @IsNotEmpty()
   EMAIL_PASSWORD: string;
+
+  // Pages and links
+  @IsString()
+  @IsNotEmpty()
+  DOMAIN_NAME_URL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  VERIFY_EMAIL_REDIRECT_LINK: string;
 }

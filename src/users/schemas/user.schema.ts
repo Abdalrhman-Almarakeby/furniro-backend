@@ -14,6 +14,12 @@ class User {
 
   @Prop()
   age: number;
+
+  @Prop({ type: String, nullable: true })
+  verificationToken: string | null;
+
+  @Prop({ default: false })
+  isVerified: boolean;
 }
 
 type UserDocument = HydratedDocument<User>;
