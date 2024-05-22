@@ -7,7 +7,7 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ObjectIdValidationPipe } from 'src/pipes/object-id-validation.pipe';
+import { ObjectIdValidationPipe } from 'src/shared/pipes/object-id-validation.pipe';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserService } from './users.service';
 import { UserWithoutPassword } from './schemas/user.schema';
