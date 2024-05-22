@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   MailerOptions,
   MailerModule as NestMailerModule,
 } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { ConfigService } from '@nestjs/config';
 import { ConfigVariables } from 'src/config/config.interface';
-
+import { join } from 'path';
 @Module({
   imports: [
     NestMailerModule.forRootAsync({
@@ -20,6 +21,13 @@ import { ConfigVariables } from 'src/config/config.interface';
             auth: {
               user: configService.get<string>('EMAIL_USERNAME'),
               pass: configService.get<string>('EMAIL_PASSWORD'),
+            },
+          },
+          template: {
+            dir: join(__dirname, '../email-templates'),
+            adapter: new HandlebarsAdapter(),
+            options: {
+              strict: true,
             },
           },
         };

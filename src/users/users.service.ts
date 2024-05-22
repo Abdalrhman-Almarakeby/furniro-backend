@@ -19,7 +19,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly passwordService: PasswordService,
-    private readonly mailerServices: MailerService,
+    private readonly mailerService: MailerService,
     private readonly configService: ConfigService<ConfigVariables, true>,
   ) {}
 
@@ -33,14 +33,19 @@ export class UserService {
     const domainName = this.configService.get<string>('DOMAIN_NAME_URL');
     const verificationLink = `${domainName}/auth/verify-email?token=${token}`;
 
-    await this.mailerServices.sendMail({
+    console.log({
+      email,
+      verificationLink,
+    });
+
+    await this.mailerService.sendMail({
       to: email,
       subject: 'Email Verification',
-      text: `
-      Please verify your email by clicking the following link: ${verificationLink}
-      
-      If you did not sign in with your email in any service you can totally ignore this email. 
-      `,
+      template: 'verification',
+      context: {
+        email,
+        verificationLink,
+      },
     });
   }
 
