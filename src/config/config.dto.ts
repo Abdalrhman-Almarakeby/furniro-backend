@@ -59,4 +59,16 @@ export class EnvironmentVariables implements ConfigVariables {
   @IsString()
   @IsNotEmpty()
   VERIFY_EMAIL_REDIRECT_LINK: string;
+
+  // cloudinary
+  @IsString()
+  @IsNotEmpty()
+  CLOUDINARY_CLOUD_NAME: string;
+
+  @IsInt()
+  CLOUDINARY_API_KEY: number;
+
+  @IsString()
+  @IsNotEmpty()
+  CLOUDINARY_API_SECRET: string;
 }
