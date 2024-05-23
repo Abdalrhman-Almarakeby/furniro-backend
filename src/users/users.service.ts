@@ -13,6 +13,7 @@ import { User, UserDocument, UserWithoutPassword } from './schemas/user.schema';
 import { PasswordService } from 'src/shared/services/password.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,7 @@ export class UserService {
     private readonly passwordService: PasswordService,
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService<ConfigVariables, true>,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   removePassword(user: User): UserWithoutPassword {
@@ -33,11 +35,6 @@ export class UserService {
     const domainName = this.configService.get<string>('DOMAIN_NAME_URL');
     const verificationLink = `${domainName}/auth/verify-email?token=${token}`;
 
-    console.log({
-      email,
-      verificationLink,
-    });
-
     await this.mailerService.sendMail({
       to: email,
       subject: 'Email Verification',
@@ -47,6 +44,24 @@ export class UserService {
         verificationLink,
       },
     });
+  }
+
+  async uploadProfileImage(
+    userId: string,
+    file: Express.Multer.File,
+  ): Promise<User> {
+    const folder = 'users-profile-images';
+    const fileUrl = await this.cloudinaryService.uploadFile(file, folder);
+
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.profileImage = fileUrl;
+
+    return user.save();
   }
 
   async findAll(): Promise<User[]> {

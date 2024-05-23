@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { UserService } from 'src/users/users.service';
 import { PasswordService } from 'src/shared/services/password.service';
 import { User, UserSchema } from 'src/users/schemas/user.schema';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { User, UserSchema } from 'src/users/schemas/user.schema';
     PasswordService,
     JwtService,
     ConfigService,
+    CloudinaryService,
   ],
 })
 export class AuthModule {}

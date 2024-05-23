@@ -16,14 +16,26 @@ export class CloudinaryService {
   async uploadFile(file: Express.Multer.File, folder: string): Promise<string> {
     return new Promise((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder, resource_type: 'auto' }, (error, result) => {
-          if (error) return reject(error);
-          if (!result?.secure_url) {
-            reject(new Error('Failed to upload file'));
-          } else {
-            resolve(result.secure_url);
-          }
-        })
+        .upload_stream(
+          {
+            folder,
+            resource_type: 'auto',
+            width: 100,
+            height: 100,
+            crop: 'fill',
+            gravity: 'auto',
+            fetch_format: 'webp',
+            quality: 'auto:low',
+          },
+          (error, result) => {
+            if (error) return reject(error);
+            if (!result?.secure_url) {
+              reject(new Error('Failed to upload file'));
+            } else {
+              resolve(result.secure_url);
+            }
+          },
+        )
         .end(file.buffer);
     });
   }
