@@ -8,7 +8,9 @@ export class Address {
   addressUserName: string;
 
   @IsString()
-  @Matches('^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$')
+  @Matches(/^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/, {
+    message: 'addressPhoneNumber must be a valid mobile phone number',
+  })
   addressPhoneNumber: string;
 
   @IsString()
