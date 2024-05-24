@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Address } from 'src/shared/schemas/address.schema';
 
 const PLACEHOLDER_PROFILE_IMAGE =
   'https://res.cloudinary.com/dxgpgpoiw/image/upload/v1716466382/users-profile-images/co496dlx7div6qhqeu5g.webp';
@@ -30,6 +31,9 @@ class User {
   @Prop({ default: false })
   isVerified: boolean;
 
+  @Prop({ default: [] })
+  addresses: Address[];
+
   // @Prop()
   // wishList: [Products];
 
@@ -44,9 +48,19 @@ type UserWithoutPassword = Omit<User, 'password'>;
 const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.pre<User>('save', function (next) {
-  if (!this.displayName) {
-    this.displayName = `${this.firstName.trim()} ${this.lastName.trim()}`;
+  if (this.displayName) return next();
+
+  const MAX_DISPLAY_NAME_LENGTH = 20;
+  const fullName = `${this.firstName.trim()} ${this.lastName.trim()}`;
+
+  if (fullName.length > MAX_DISPLAY_NAME_LENGTH) {
+    this.displayName = this.lastName.trim();
+
+    next();
   }
+
+  this.displayName = fullName;
+
   next();
 });
 
