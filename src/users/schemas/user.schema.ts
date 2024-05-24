@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { Address } from 'src/shared/schemas/address.schema';
+import { Address } from 'src/common/schemas/address.schema';
 
 const PLACEHOLDER_PROFILE_IMAGE =
   'https://res.cloudinary.com/dxgpgpoiw/image/upload/v1716466382/users-profile-images/co496dlx7div6qhqeu5g.webp';

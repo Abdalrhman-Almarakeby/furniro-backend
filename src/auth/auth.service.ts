@@ -3,7 +3,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ConfigVariables } from 'src/config/config.interface';
 import { UserService } from 'src/users/users.service';
-import { PasswordService } from 'src/shared/services/password.service';
+import { PasswordService } from 'src/common/services/password.service';
 import { LoginDto } from './dto/login.dto';
 import { UserWithoutPassword } from 'src/users/schemas/user.schema';
 

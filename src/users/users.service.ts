@@ -10,7 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { User, UserDocument, UserWithoutPassword } from './schemas/user.schema';
-import { PasswordService } from 'src/shared/services/password.service';
+import { PasswordService } from 'src/common/services/password.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';

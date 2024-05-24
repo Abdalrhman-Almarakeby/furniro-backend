@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateUserDto } from './create-user.dto';
-import { Address } from 'src/shared/dto/address.dto';
+import { Address } from 'src/common/dto/address.dto';
 
 export class UpdateUserDto extends OmitType(PartialType(CreateUserDto), [
   'email',

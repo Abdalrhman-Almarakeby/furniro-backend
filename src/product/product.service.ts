@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProductDto } from 'src/shared/dto/product.dto';
-import { Product, ProductDocument } from 'src/shared/schemas/product.schema';
+import { ProductDto } from 'src/common/dto/product.dto';
+import { Product, ProductDocument } from 'src/common/schemas/product.schema';
 
 @Injectable()
 export class ProductService {
