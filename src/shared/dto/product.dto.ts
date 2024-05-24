@@ -9,14 +9,13 @@ import {
   IsOptional,
   IsString,
   Max,
-  MaxLength,
   Min,
-  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { Categories } from 'src/common/enums/categories.enum';
 import { Color } from './color.dto';
-import { PackagingInfo } from './packagingInfo.dto';
+import { PackagingInfo } from './packaging-info.dto';
+import { ProductMeasurements } from './product-measurements.dto';
 
 export class ProductDto {
   @IsString()
@@ -46,11 +45,10 @@ export class ProductDto {
   @Type(() => Color)
   availableColors: Color[];
 
-  // TODO: Add proper measurements validation
-  @IsString()
-  @MinLength(10)
-  @MaxLength(20)
-  measurements: string;
+  @IsObject()
+  @ValidateNested()
+  @Type(() => ProductMeasurements)
+  measurements: ProductMeasurements;
 
   @IsObject()
   @ValidateNested()

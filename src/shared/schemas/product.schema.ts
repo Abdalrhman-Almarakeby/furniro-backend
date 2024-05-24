@@ -3,6 +3,7 @@ import { HydratedDocument } from 'mongoose';
 import { Categories } from 'src/common/enums/categories.enum';
 import { Color } from './color.schema';
 import { PackagingInfo } from './packagingInfo.schema';
+import { ProductMeasurements } from './product-measurements.schema';
 
 @Schema({ timestamps: true })
 class Product {
@@ -31,8 +32,8 @@ class Product {
   @Prop({ type: [Color] })
   availableColors: Color[];
 
-  @Prop()
-  measurements: string;
+  @Prop({ type: ProductMeasurements })
+  measurements: ProductMeasurements;
 
   @Prop()
   description: string;
