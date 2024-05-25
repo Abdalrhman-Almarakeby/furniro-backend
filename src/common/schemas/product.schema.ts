@@ -65,7 +65,9 @@ ProductSchema.virtual('hasDiscount').get(function () {
 });
 
 ProductSchema.virtual('discountPercentage').get(function () {
-  return (this.discountPrice / this.originalPrice) * 100;
+  const discountAmount = this.originalPrice - this.discountPrice;
+
+  return (discountAmount / this.originalPrice) * 100;
 });
 
 ProductSchema.virtual('isNew').get(function () {

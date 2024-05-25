@@ -1,8 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ProductDto } from 'src/common/dto/product.dto';
 import { Product, ProductDocument } from 'src/common/schemas/product.schema';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -28,6 +33,22 @@ export class ProductService {
     }
   }
 
+  async findAll(): Promise<Product[]> {
+    const productDocuments = await this.productModel.find().exec();
+
+    return productDocuments.map((product) => product.toObject());
+  }
+
+  async findOne(id: string): Promise<Product> {
+    const product = await this.productModel.findById(id);
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product.toObject();
+  }
+
   async create(createProductDto: ProductDto) {
     await this.checkIfProductExists(
       createProductDto.productName,
@@ -37,5 +58,31 @@ export class ProductService {
     const newProduct = await this.productModel.create(createProductDto);
 
     return newProduct.toObject();
+  }
+
+  async update(id: string, updateUserDto: UpdateProductDto): Promise<Product> {
+    const product = await this.productModel.findByIdAndUpdate(
+      id,
+      updateUserDto,
+      {
+        new: true,
+      },
+    );
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product.toObject();
+  }
+
+  async remove(id: string): Promise<Product> {
+    const product = await this.productModel.findByIdAndDelete(id);
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product.toObject();
   }
 }
