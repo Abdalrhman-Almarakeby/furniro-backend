@@ -13,7 +13,7 @@ import {
 import { ObjectIdValidationPipe } from 'src/common/pipes/object-id-validation.pipe';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserService } from './users.service';
-import { UserWithoutPassword } from './schemas/user.schema';
+import { UserWithoutPassword } from '../common/schemas/user.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 

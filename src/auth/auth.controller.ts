@@ -13,7 +13,7 @@ import { Request as RequestType, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserService } from 'src/users/users.service';
 import { RefreshJwtGuard } from './guards/refresh-jwt.guard';
-import { UserWithoutPassword } from 'src/users/schemas/user.schema';
+import { UserWithoutPassword } from 'src/common/schemas/user.schema';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { ConfigService } from '@nestjs/config';

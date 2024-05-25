@@ -5,7 +5,7 @@ import { ConfigVariables } from 'src/config/config.interface';
 import { UserService } from 'src/users/users.service';
 import { PasswordService } from 'src/common/services/password.service';
 import { LoginDto } from './dto/login.dto';
-import { UserWithoutPassword } from 'src/users/schemas/user.schema';
+import { UserWithoutPassword } from 'src/common/schemas/user.schema';
 
 type Payload = {
   email: string;

@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Categories } from 'src/common/enums/categories.enum';
 import { Color } from './color.schema';
 import { PackagingInfo } from './packagingInfo.schema';
 import { ProductMeasurements } from './product-measurements.schema';
+import { Review, ReviewSchema } from './review.schema';
 
 @Schema({ timestamps: true })
 class Product {
@@ -46,6 +47,9 @@ class Product {
 
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
+
+  @Prop({ type: [ReviewSchema], default: [] })
+  reviews: Types.DocumentArray<Review>;
 }
 
 type ProductDocument = HydratedDocument<Product>;
@@ -65,7 +69,7 @@ ProductSchema.virtual('hasDiscount').get(function () {
 });
 
 ProductSchema.virtual('discountPercentage').get(function () {
-  const discountAmount = this.originalPrice - this.discountPrice;
+  const discountAmount: number = this.originalPrice - this.discountPrice;
 
   return (discountAmount / this.originalPrice) * 100;
 });
