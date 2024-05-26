@@ -6,6 +6,8 @@ import { Product, ProductSchema } from 'src/common/schemas/product.schema';
 import { Review, ReviewSchema } from 'src/common/schemas/review.schema';
 import { User, UserSchema } from 'src/common/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
+import { ReviewsController } from 'src/reviews/reviews.controller';
+import { ReviewsService } from 'src/reviews/reviews.service';
 
 @Module({
   imports: [
@@ -15,7 +17,7 @@ import { JwtService } from '@nestjs/jwt';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  controllers: [ProductController],
-  providers: [ProductService, JwtService],
+  controllers: [ProductController, ReviewsController],
+  providers: [ProductService, JwtService, ReviewsService],
 })
 export class ProductModule {}
