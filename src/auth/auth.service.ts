@@ -43,6 +43,11 @@ export class AuthService {
     loginData: LoginDto,
   ): Promise<UserWithoutPassword> {
     const user = await this.userService.findOneByEmail(loginData.email);
+
+    if (!user.isVerified) {
+      throw new UnauthorizedException('Email is not verified');
+    }
+
     const isCorrectPassword = await this.passwordService.verifyPassword(
       loginData.password,
       user.password,
