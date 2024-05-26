@@ -1,5 +1,6 @@
 import {
-  BadRequestException,
+  ConflictException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -10,15 +11,31 @@ import { Product, ProductDocument } from 'src/common/schemas/product.schema';
 import { UpdateReviewDto } from 'src/common/dto/update-review.dto';
 import { Review } from 'src/common/schemas/review.schema';
 import { CreateReviewDto } from 'src/common/dto/create-review.dto';
+import { UserService } from 'src/users/users.service';
 
 @Injectable()
 export class ReviewsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
     @InjectModel(Review.name) private reviewModel: Model<Review>,
+    private readonly userServices: UserService,
   ) {}
 
-  private validateUserCanReview(product: ProductDocument, userId: string) {
+  private async validateUserCanReview(
+    product: ProductDocument,
+    userId: string,
+  ) {
+    const user = await this.userServices.findOne(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!user.isVerified) {
+      throw new ForbiddenException('Email is not verified');
+    }
+
+    // Validate that the user have no review on this product
     const reviews = product.toObject().reviews;
 
     const reviewFromSameUser = reviews.find(
@@ -26,8 +43,18 @@ export class ReviewsService {
     );
 
     if (reviewFromSameUser) {
-      throw new BadRequestException('User already reviewed this product ');
+      throw new ConflictException('User already reviewed this product');
     }
+  }
+
+  async findOne(id: string): Promise<Review> {
+    const review = await this.reviewModel.findById(id);
+
+    if (!review) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return review.toObject();
   }
 
   async create(
@@ -40,7 +67,7 @@ export class ReviewsService {
       throw new NotFoundException('Product not found');
     }
 
-    this.validateUserCanReview(product, createReviewDto.user);
+    await this.validateUserCanReview(product, createReviewDto.user);
 
     const review = new this.reviewModel(createReviewDto);
 
