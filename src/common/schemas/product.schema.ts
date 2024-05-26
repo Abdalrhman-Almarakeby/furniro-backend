@@ -2,47 +2,49 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Categories } from 'src/common/enums/categories.enum';
 import { Color } from './color.schema';
-import { PackagingInfo } from './packagingInfo.schema';
+import { PackagingInfo } from './packaging-info.schema';
 import { ProductMeasurements } from './product-measurements.schema';
 import { Review, ReviewSchema } from './review.schema';
 
 @Schema({ timestamps: true })
 class Product {
-  @Prop()
+  @Prop({ require: true })
   productName: string;
 
-  @Prop()
+  @Prop({ require: true })
   originalPrice: number;
 
-  @Prop()
+  @Prop({ require: true })
   discountPrice: number;
 
   @Prop({
     type: Number,
     min: 1000,
     max: 9999,
+    require: true,
   })
   sku: number;
 
   @Prop({
     type: [String],
     enum: Categories,
+    require: true,
   })
   category: string[];
 
-  @Prop({ type: [Color] })
+  @Prop({ type: [Color], require: true })
   availableColors: Color[];
 
-  @Prop({ type: ProductMeasurements })
+  @Prop({ type: ProductMeasurements, require: true })
   measurements: ProductMeasurements;
 
-  @Prop()
+  @Prop({ require: true })
   description: string;
 
-  @Prop()
+  @Prop({ require: true })
   details: string;
 
-  @Prop({ type: PackagingInfo })
+  @Prop({ type: PackagingInfo, require: true })
   packagingInfo: PackagingInfo;
 
   @Prop({ type: Date, default: Date.now })

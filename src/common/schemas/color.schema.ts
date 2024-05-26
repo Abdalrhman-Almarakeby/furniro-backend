@@ -3,10 +3,10 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema({ _id: false })
 class Color {
-  @Prop()
+  @Prop({ required: true })
   hexCode: string;
 
-  @Prop()
+  @Prop({ required: true })
   name: string;
 }
 

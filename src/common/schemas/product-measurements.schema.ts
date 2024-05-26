@@ -3,13 +3,13 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema({ _id: false })
 class ProductMeasurements {
-  @Prop()
+  @Prop({ required: true })
   width: string;
 
-  @Prop()
+  @Prop({ required: true })
   height: string;
 
-  @Prop()
+  @Prop({ required: true })
   length: string;
 }
 

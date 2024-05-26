@@ -3,19 +3,19 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema({ _id: false })
 class PackagingInfo {
-  @Prop()
+  @Prop({ required: true })
   numOfPackages: number;
 
-  @Prop()
+  @Prop({ required: true })
   width: string;
 
-  @Prop()
+  @Prop({ required: true })
   height: string;
 
-  @Prop()
+  @Prop({ required: true })
   length: string;
 
-  @Prop()
+  @Prop({ required: true })
   weight: string;
 }
 

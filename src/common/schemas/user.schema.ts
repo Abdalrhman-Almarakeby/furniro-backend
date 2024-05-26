@@ -7,25 +7,25 @@ const PLACEHOLDER_PROFILE_IMAGE =
 
 @Schema()
 class User {
-  @Prop()
+  @Prop({ required: true })
   firstName: string;
 
-  @Prop()
+  @Prop({ required: true })
   lastName: string;
 
-  @Prop()
+  @Prop({ required: true })
   displayName: string;
 
   @Prop({ unique: true })
   email: string;
 
-  @Prop()
+  @Prop({ required: true })
   password: string;
 
   @Prop({ default: PLACEHOLDER_PROFILE_IMAGE })
   profileImage: string;
 
-  @Prop({ type: String, nullable: true })
+  @Prop({ type: String, nullable: true, required: true })
   verificationToken: string | null;
 
   @Prop({ default: false })
@@ -34,10 +34,10 @@ class User {
   @Prop({ default: [] })
   addresses: Address[];
 
-  // @Prop()
+  // @Prop({ required: true })
   // wishList: [Products];
 
-  // @Prop()
+  // @Prop({ required: true })
   // orders: [Order];
 }
 

@@ -3,16 +3,16 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema({ _id: false })
 class Address {
-  @Prop()
+  @Prop({ require: true })
   addressName: string;
 
-  @Prop()
+  @Prop({ require: true })
   addressUserName: string;
 
-  @Prop()
+  @Prop({ require: true })
   addressPhoneNumber: string;
 
-  @Prop()
+  @Prop({ require: true })
   address: string;
 }
 
