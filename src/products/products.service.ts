@@ -104,6 +104,8 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
 
+    this.validateUserCanReview(product, createReviewDto.user);
+
     const review = new this.reviewModel(createReviewDto);
 
     product.reviews.push(review);
@@ -120,6 +122,18 @@ export class ProductService {
       path: 'reviews.user',
       model: 'User',
     });
+  }
+
+  private validateUserCanReview(product: ProductDocument, userId: string) {
+    const reviews = product.toObject().reviews;
+
+    const reviewFromSameUser = reviews.find(
+      (review) => review.user.toString() === userId,
+    );
+
+    if (reviewFromSameUser) {
+      throw new BadRequestException('User already reviewed this product ');
+    }
   }
 
   async updateReview(
@@ -161,7 +175,9 @@ export class ProductService {
     }
 
     const reviews = product.toObject().reviews;
-    const reviewToDelete = reviews.find((review) => review.id === reviewId);
+    const reviewToDelete = reviews.find(
+      (review) => review.id.toString() === reviewId,
+    );
 
     if (!reviewToDelete) {
       throw new NotFoundException('Review not found');
@@ -172,7 +188,7 @@ export class ProductService {
     const newProduct = await this.productModel.findByIdAndUpdate(
       productId,
       {
-        reviews: reviews.filter((review) => review.id !== reviewId),
+        reviews: reviews.filter((review) => review.id.toString() !== reviewId),
       },
       { new: true },
     );
