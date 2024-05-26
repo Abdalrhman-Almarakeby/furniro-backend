@@ -48,7 +48,7 @@ export class ProductService {
     });
 
     if (!product) {
-      throw new NotFoundException('Product hhhhhh not found');
+      throw new NotFoundException('Product not found');
     }
 
     return product.toObject();
