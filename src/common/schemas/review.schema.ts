@@ -3,7 +3,7 @@ import { HydratedDocument, Types } from 'mongoose';
 import { User } from './user.schema';
 
 @Schema()
-export class Review {
+class Review {
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
   user: Types.ObjectId;
 
@@ -14,6 +14,8 @@ export class Review {
   comment: string;
 }
 
-export const ReviewSchema = SchemaFactory.createForClass(Review);
+const ReviewSchema = SchemaFactory.createForClass(Review);
 
-export type ReviewDocument = HydratedDocument<Review>;
+type ReviewDocument = HydratedDocument<Review>;
+
+export { Review, ReviewDocument, ReviewSchema };
