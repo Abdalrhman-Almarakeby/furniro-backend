@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Address } from 'src/common/schemas/address.schema';
 
 const PLACEHOLDER_PROFILE_IMAGE =
@@ -34,8 +34,8 @@ class User {
   @Prop({ default: [] })
   addresses: Address[];
 
-  // @Prop({ required: true })
-  // wishList: [Products];
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Product' }], default: [] })
+  wishlist: Types.ObjectId[];
 
   // @Prop({ required: true })
   // orders: [Order];

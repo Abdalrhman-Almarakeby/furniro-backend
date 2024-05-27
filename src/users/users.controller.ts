@@ -33,6 +33,24 @@ export class UsersController {
     return this.userService.removePassword(user);
   }
 
+  @UseGuards(AuthGuard)
+  @Post(':userId/wishlist/:itemId')
+  async addToWishlist(
+    @Param('userId', ObjectIdValidationPipe) userId: string,
+    @Param('itemId', ObjectIdValidationPipe) itemId: string,
+  ) {
+    return this.userService.addToWishlist(userId, itemId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':userId/wishlist/:itemId')
+  async removeFromWishlist(
+    @Param('userId', ObjectIdValidationPipe) userId: string,
+    @Param('itemId', ObjectIdValidationPipe) itemId: string,
+  ) {
+    return this.userService.removeFromWishlist(userId, itemId);
+  }
+
   @Get()
   async findAll(): Promise<UserWithoutPassword[]> {
     const users = await this.userService.findAll();
