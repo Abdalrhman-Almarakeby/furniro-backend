@@ -13,11 +13,11 @@ import { Request as RequestType, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserService } from 'src/users/users.service';
 import { RefreshJwtGuard } from './guards/refresh-jwt.guard';
-import { UserWithoutPassword } from 'src/common/schemas/user.schema';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { ConfigService } from '@nestjs/config';
 import { ConfigVariables } from 'src/config/config.interface';
+import { User } from 'src/common/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -28,17 +28,13 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  async register(
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<UserWithoutPassword> {
-    const user = await this.userService.create(createUserDto);
-
-    return this.userService.removePassword(user);
+  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.userService.create(createUserDto);
   }
 
   @Post('login')
   async login(@Body() LoginData: LoginDto): Promise<{
-    user: UserWithoutPassword;
+    user: User;
     tokens: {
       accessToken: string;
       refreshToken: string;
@@ -69,7 +65,7 @@ export class AuthController {
     req: RequestType & {
       user: {
         email: string;
-        sub: UserWithoutPassword;
+        sub: User;
       };
     },
   ): Promise<{

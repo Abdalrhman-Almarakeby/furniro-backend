@@ -5,11 +5,11 @@ import { ConfigVariables } from 'src/config/config.interface';
 import { UserService } from 'src/users/users.service';
 import { PasswordService } from 'src/common/services/password.service';
 import { LoginDto } from './dto/login.dto';
-import { UserWithoutPassword } from 'src/common/schemas/user.schema';
+import { User } from 'src/common/schemas/user.schema';
 
 type Payload = {
   email: string;
-  sub: UserWithoutPassword;
+  sub: User;
 };
 
 @Injectable()
@@ -39,9 +39,7 @@ export class AuthService {
     return this.jwtService.signAsync(payload, this.refreshTokenOptions);
   }
 
-  private async validatedUser(
-    loginData: LoginDto,
-  ): Promise<UserWithoutPassword> {
+  private async validatedUser(loginData: LoginDto): Promise<User> {
     const user = await this.userService.findOneByEmail(loginData.email);
 
     if (!user.isVerified) {
@@ -57,11 +55,11 @@ export class AuthService {
       throw new UnauthorizedException('The email or password is incorrect');
     }
 
-    return this.userService.removePassword(user);
+    return user;
   }
 
   async login(loginData: LoginDto): Promise<{
-    user: UserWithoutPassword;
+    user: User;
     tokens: {
       accessToken: string;
       refreshToken: string;

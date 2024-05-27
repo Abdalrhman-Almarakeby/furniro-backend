@@ -43,11 +43,9 @@ class User {
 
 type UserDocument = HydratedDocument<User>;
 
-type UserWithoutPassword = Omit<User, 'password'>;
-
 const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.pre<User>('validate', function (next) {
+UserSchema.pre('validate', function (next) {
   if (this.displayName) return next();
 
   const MAX_DISPLAY_NAME_LENGTH = 20;
@@ -64,4 +62,11 @@ UserSchema.pre<User>('validate', function (next) {
   next();
 });
 
-export { User, UserDocument, UserWithoutPassword, UserSchema };
+UserSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+
+  return obj;
+};
+
+export { User, UserDocument, UserSchema };

@@ -9,11 +9,7 @@ import { ConfigVariables } from 'src/config/config.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  User,
-  UserDocument,
-  UserWithoutPassword,
-} from '../common/schemas/user.schema';
+import { User, UserDocument } from '../common/schemas/user.schema';
 import { PasswordService } from 'src/common/services/password.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -28,12 +24,6 @@ export class UserService {
     private readonly configService: ConfigService<ConfigVariables, true>,
     private cloudinaryService: CloudinaryService,
   ) {}
-
-  removePassword(user: User): UserWithoutPassword {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...rest } = user;
-    return rest;
-  }
 
   private async sendVerificationEmail(email: string, token: string) {
     const domainName = this.configService.get<string>('DOMAIN_NAME_URL');
@@ -65,13 +55,13 @@ export class UserService {
 
     user.profileImage = fileUrl;
 
-    return user.save();
+    return (await user.save()).toJSON();
   }
 
   async findAll(): Promise<User[]> {
     const usersDocuments = await this.userModel.find().exec();
 
-    return usersDocuments.map((user) => user.toObject());
+    return usersDocuments.map((user) => user.toJSON());
   }
 
   async findOne(id: string): Promise<User> {
@@ -81,7 +71,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return user.toObject();
+    return user.toJSON();
   }
 
   async findOneByEmail(email: string): Promise<User> {
@@ -91,7 +81,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return user.toObject();
+    return user.toJSON();
   }
 
   async verifyEmail(verificationToken: string): Promise<User> {
@@ -109,7 +99,7 @@ export class UserService {
       },
     );
 
-    return user;
+    return user.toJSON();
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -135,7 +125,7 @@ export class UserService {
 
     await this.sendVerificationEmail(createdUser.email, verificationToken);
 
-    return createdUser.toObject();
+    return createdUser.toJSON();
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
@@ -147,7 +137,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return user.toObject();
+    return user.toJSON();
   }
 
   async remove(id: string): Promise<User> {
@@ -157,6 +147,6 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return user.toObject();
+    return user.toJSON();
   }
 }
