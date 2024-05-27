@@ -83,12 +83,4 @@ ProductSchema.virtual('isNew').get(function () {
   return this.createdAt >= new Date(Date.now() - MAX_TIME_TO_BE_NEW);
 });
 
-ProductSchema.set('toJSON', {
-  virtuals: true,
-});
-
-ProductSchema.set('toObject', {
-  virtuals: true,
-});
-
 export { Product, ProductDocument, ProductSchema };

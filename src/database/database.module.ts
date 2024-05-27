@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 import { ConfigVariables } from 'src/config/config.interface';
+import { setVirtuals, addVirtualId } from 'src/database/plugins';
 
 @Module({
   imports: [
@@ -16,4 +18,9 @@ import { ConfigVariables } from 'src/config/config.interface';
     }),
   ],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+  constructor() {
+    mongoose.plugin(setVirtuals);
+    mongoose.plugin(addVirtualId);
+  }
+}

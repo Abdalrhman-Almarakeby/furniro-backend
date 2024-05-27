@@ -47,7 +47,7 @@ type UserWithoutPassword = Omit<User, 'password'>;
 
 const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.pre<User>('save', function (next) {
+UserSchema.pre<User>('validate', function (next) {
   if (this.displayName) return next();
 
   const MAX_DISPLAY_NAME_LENGTH = 20;
@@ -62,18 +62,6 @@ UserSchema.pre<User>('save', function (next) {
   this.displayName = fullName;
 
   next();
-});
-
-UserSchema.virtual('id').get(function () {
-  return this._id.toHexString();
-});
-
-UserSchema.set('toJSON', {
-  virtuals: true,
-});
-
-UserSchema.set('toObject', {
-  virtuals: true,
 });
 
 export { User, UserDocument, UserWithoutPassword, UserSchema };

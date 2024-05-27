@@ -16,16 +16,4 @@ export class Review {
 
 export const ReviewSchema = SchemaFactory.createForClass(Review);
 
-ReviewSchema.virtual('id').get(function () {
-  return this._id.toHexString();
-});
-
-ReviewSchema.set('toJSON', {
-  virtuals: true,
-});
-
-ReviewSchema.set('toObject', {
-  virtuals: true,
-});
-
 export type ReviewDocument = HydratedDocument<Review>;
