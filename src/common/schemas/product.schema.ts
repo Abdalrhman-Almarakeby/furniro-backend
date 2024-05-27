@@ -66,6 +66,12 @@ ProductSchema.pre<Product>('save', function (next) {
   next();
 });
 
+ProductSchema.pre('find', function (next) {
+  this.populate('reviews.user');
+
+  next();
+});
+
 ProductSchema.virtual('hasDiscount').get(function () {
   return this.discountPrice !== this.originalPrice;
 });

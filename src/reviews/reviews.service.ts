@@ -81,10 +81,7 @@ export class ReviewsService {
       throw new InternalServerErrorException();
     }
 
-    return newProduct.populate({
-      path: 'reviews.user',
-      model: 'User',
-    });
+    return newProduct;
   }
 
   async update(
@@ -112,10 +109,7 @@ export class ReviewsService {
       throw new InternalServerErrorException();
     }
 
-    return newProduct.populate({
-      path: 'reviews.user',
-      model: 'User',
-    });
+    return newProduct;
   }
 
   async remove(productId: string, reviewId: string): Promise<Product> {
@@ -148,9 +142,6 @@ export class ReviewsService {
       throw new InternalServerErrorException();
     }
 
-    return newProduct.populate({
-      path: 'reviews.user',
-      model: 'User',
-    });
+    return newProduct;
   }
 }
