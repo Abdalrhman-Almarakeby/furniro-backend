@@ -34,8 +34,11 @@ class User {
   @Prop({ default: [] })
   addresses: Address[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Product' }], default: [] })
-  wishlist: Types.ObjectId[];
+  @Prop({
+    type: [{ product: { type: Types.ObjectId, ref: 'Product' } }],
+    default: [],
+  })
+  wishlist: { product: Types.ObjectId }[];
 
   // @Prop({ required: true })
   // orders: [Order];
@@ -61,12 +64,5 @@ UserSchema.pre('validate', function (next) {
 
   next();
 });
-
-UserSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-
-  return obj;
-};
 
 export { User, UserDocument, UserSchema };
