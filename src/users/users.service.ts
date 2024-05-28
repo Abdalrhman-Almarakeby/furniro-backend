@@ -58,6 +58,34 @@ export class UserService {
     return (await user.save()).toJSON();
   }
 
+  async addToWishlist(userId: string, itemId: string): Promise<User> {
+    const user = await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $addToSet: { wishlist: itemId } },
+        { new: true },
+      )
+      .exec();
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  async removeFromWishlist(userId: string, itemId: string): Promise<User> {
+    const user = await this.userModel
+      .findByIdAndUpdate(userId, { $pull: { wishlist: itemId } }, { new: true })
+      .exec();
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
   async findAll(): Promise<User[]> {
     const usersDocuments = await this.userModel.find().exec();
 

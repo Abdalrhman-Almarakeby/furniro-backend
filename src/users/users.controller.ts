@@ -56,8 +56,24 @@ export class UsersController {
     @Param('id', ObjectIdValidationPipe) id: string,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<User> {
-    const user = await this.userService.uploadProfileImage(id, file);
+    return this.userService.uploadProfileImage(id, file);
+  }
 
-    return user;
+  @UseGuards(AuthGuard)
+  @Post(':userId/wishlist/:itemId')
+  async addToWishlist(
+    @Param('userId', ObjectIdValidationPipe) userId: string,
+    @Param('itemId', ObjectIdValidationPipe) itemId: string,
+  ) {
+    return this.userService.addToWishlist(userId, itemId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':userId/wishlist/:itemId')
+  async removeFromWishlist(
+    @Param('userId', ObjectIdValidationPipe) userId: string,
+    @Param('itemId', ObjectIdValidationPipe) itemId: string,
+  ) {
+    return this.userService.removeFromWishlist(userId, itemId);
   }
 }
