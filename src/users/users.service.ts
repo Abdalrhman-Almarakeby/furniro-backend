@@ -59,31 +59,63 @@ export class UserService {
   }
 
   async addToWishlist(userId: string, itemId: string): Promise<User> {
-    const user = await this.userModel
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const productExist = user.wishlist.find(
+      ({ product }) => product._id.toHexString() === itemId,
+    );
+
+    if (productExist) {
+      throw new BadRequestException('Product already exist in the wishlist');
+    }
+
+    const newUser = await this.userModel
       .findByIdAndUpdate(
         userId,
-        { $addToSet: { wishlist: itemId } },
+        { $addToSet: { wishlist: { product: itemId } } },
         { new: true },
       )
       .exec();
 
-    if (!user) {
+    if (!newUser) {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    return newUser.toJSON();
   }
 
   async removeFromWishlist(userId: string, itemId: string): Promise<User> {
-    const user = await this.userModel
-      .findByIdAndUpdate(userId, { $pull: { wishlist: itemId } }, { new: true })
-      .exec();
+    const user = await this.userModel.findById(userId);
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    return user;
+    const productExist = user.wishlist.find(
+      ({ product }) => product._id.toHexString() === itemId,
+    );
+
+    if (!productExist) {
+      throw new BadRequestException("Product doesn't exist in the wishlist");
+    }
+
+    const newUser = await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $pull: { wishlist: { product: itemId } } },
+        { new: true },
+      )
+      .exec();
+
+    if (!newUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    return newUser.toJSON();
   }
 
   async findAll(): Promise<User[]> {
@@ -93,7 +125,7 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userModel.findById(id);
+    const user = await this.userModel.findById(id).populate('wishlist.product');
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -109,7 +141,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return user.toJSON();
+    return user.toObject();
   }
 
   async verifyEmail(verificationToken: string): Promise<User> {
