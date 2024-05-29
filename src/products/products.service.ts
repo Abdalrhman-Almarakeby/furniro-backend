@@ -5,16 +5,16 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProductDto } from 'src/common/dto/product.dto';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { Product, ProductDocument } from 'src/common/schemas/product.schema';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Review } from 'src/common/schemas/review.schema';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
-    @InjectModel(Review.name) private reviewModel: Model<Review>,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   private async checkIfProductExists(
@@ -51,15 +51,29 @@ export class ProductService {
     return product.toObject();
   }
 
-  async create(createProductDto: ProductDto) {
-    await this.checkIfProductExists(
-      createProductDto.productName,
-      createProductDto.sku,
+  async create({
+    images,
+    createProductDto: { data },
+  }: {
+    images: Express.Multer.File[];
+    createProductDto: CreateProductDto;
+  }) {
+    const folder = 'product-images';
+    const uploadPromises = images.map((file) =>
+      this.cloudinaryService.uploadFile(file, folder),
     );
+    const imageUrls = await Promise.all(uploadPromises);
 
-    const newProduct = await this.productModel.create(createProductDto);
+    const dataObject = JSON.parse(JSON.parse(data));
 
-    return newProduct.toObject();
+    await this.checkIfProductExists(dataObject.name, dataObject.sku);
+
+    const createdProduct = new this.productModel({
+      ...dataObject,
+      images: imageUrls,
+    });
+
+    return createdProduct.save();
   }
 
   async update(id: string, updateUserDto: UpdateProductDto): Promise<Product> {

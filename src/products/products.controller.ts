@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ProductService } from './products.service';
-import { ProductDto } from 'src/common/dto/product.dto';
 import { ObjectIdValidationPipe } from 'src/common/pipes/object-id-validation.pipe';
 import { Product } from 'src/common/schemas/product.schema';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 export class ProductController {
@@ -30,8 +33,12 @@ export class ProductController {
   }
 
   @Post()
-  async create(@Body() createProductDto: ProductDto): Promise<Product> {
-    return this.productService.create(createProductDto);
+  @UseInterceptors(FilesInterceptor('images', 10))
+  async createProduct(
+    @UploadedFiles() images: Array<Express.Multer.File>,
+    @Body() createProductDto: CreateProductDto,
+  ) {
+    return this.productService.create({ images, createProductDto });
   }
 
   @Patch(':id')
