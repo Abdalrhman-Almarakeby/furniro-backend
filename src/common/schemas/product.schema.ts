@@ -52,6 +52,9 @@ class Product {
 
   @Prop({ type: [ReviewSchema], default: [] })
   reviews: Types.DocumentArray<Review>;
+
+  @Prop({ type: [String], required: true })
+  images: string[];
 }
 
 type ProductDocument = HydratedDocument<Product>;
