@@ -1,12 +1,12 @@
-import { IsValidDimension } from 'src/common/validators';
+import { IsDimension } from 'src/common/validators';
 
 export class ProductMeasurements {
-  @IsValidDimension()
+  @IsDimension()
   width: string;
 
-  @IsValidDimension()
+  @IsDimension()
   height: string;
 
-  @IsValidDimension()
+  @IsDimension()
   length: string;
 }

@@ -4,10 +4,10 @@ import {
   ValidationArguments,
 } from 'class-validator';
 
-export function IsValidDimension(validationOptions?: ValidationOptions) {
+export function IsDimension(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
-      name: 'isValidDimension',
+      name: 'isDimension',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,

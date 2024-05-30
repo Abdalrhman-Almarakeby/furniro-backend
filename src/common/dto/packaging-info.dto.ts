@@ -1,20 +1,20 @@
 import { IsNumber, Min } from 'class-validator';
-import { IsValidDimension, IsValidWeight } from 'src/common/validators';
+import { IsDimension, IsWeight } from 'src/common/validators';
 
 export class PackagingInfo {
   @IsNumber()
   @Min(1)
   numOfPackages: number;
 
-  @IsValidDimension()
+  @IsDimension()
   width: string;
 
-  @IsValidDimension()
+  @IsDimension()
   height: string;
 
-  @IsValidDimension()
+  @IsDimension()
   length: string;
 
-  @IsValidWeight()
+  @IsWeight()
   weight: string;
 }

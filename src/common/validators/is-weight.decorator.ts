@@ -4,10 +4,10 @@ import {
   ValidationArguments,
 } from 'class-validator';
 
-export function IsValidWeight(validationOptions?: ValidationOptions) {
+export function IsWeight(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
-      name: 'isValidWeight',
+      name: 'isWeight',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
