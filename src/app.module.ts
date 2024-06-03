@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { HelmetMiddleware } from './middlewares/helmet.middleware';
 import { RateLimitMiddleware } from './middlewares/rate-limit.middleware';
 import { HttpsRedirectMiddleware } from './middlewares/https-redirect.middleware';
 import { AppController } from './app.controller';
@@ -24,6 +25,8 @@ import { ProductModule } from './products/products.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HttpsRedirectMiddleware, RateLimitMiddleware).forRoutes('*');
+    consumer
+      .apply(HelmetMiddleware, HttpsRedirectMiddleware, RateLimitMiddleware)
+      .forRoutes('*');
   }
 }
