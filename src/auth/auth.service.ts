@@ -21,8 +21,10 @@ export class AuthService {
     private readonly configService: ConfigService<ConfigVariables, true>,
   ) {}
 
+  private accessTokenExpireTimeSecond = 60 * 60 * 24;
+
   private accessTokenOptions: JwtSignOptions = {
-    expiresIn: '1h',
+    expiresIn: this.accessTokenExpireTimeSecond,
     secret: this.configService.get<string>('JWT_SECRET_KEY'),
   };
 
@@ -37,6 +39,10 @@ export class AuthService {
 
   private async generateRefreshToken(payload: Payload): Promise<string> {
     return this.jwtService.signAsync(payload, this.refreshTokenOptions);
+  }
+
+  private getExpiresInTime(expireTimeSecond: number) {
+    return new Date().setTime(new Date().getTime() + expireTimeSecond * 1000);
   }
 
   private async validatedUser(loginData: LoginDto): Promise<User> {
@@ -63,6 +69,7 @@ export class AuthService {
     tokens: {
       accessToken: string;
       refreshToken: string;
+      expiresIn: number;
     };
   }> {
     const user = await this.validatedUser(loginData);
@@ -74,12 +81,14 @@ export class AuthService {
 
     const accessToken = await this.generateAccessToken(payload);
     const refreshToken = await this.generateRefreshToken(payload);
+    const expiresIn = this.getExpiresInTime(this.accessTokenExpireTimeSecond);
 
     return {
       user,
       tokens: {
         accessToken,
         refreshToken,
+        expiresIn,
       },
     };
   }
@@ -87,6 +96,7 @@ export class AuthService {
   async refreshToken(requestPayload: Payload): Promise<{
     accessToken: string;
     refreshToken: string;
+    expiresIn: number;
   }> {
     const payload = {
       email: requestPayload.email,
@@ -95,10 +105,12 @@ export class AuthService {
 
     const accessToken = await this.generateAccessToken(payload);
     const refreshToken = await this.generateRefreshToken(payload);
+    const expiresIn = this.getExpiresInTime(this.accessTokenExpireTimeSecond);
 
     return {
       accessToken,
       refreshToken,
+      expiresIn,
     };
   }
 }
