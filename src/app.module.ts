@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { HelmetMiddleware } from './middlewares/helmet.middleware';
-import { RateLimitMiddleware } from './middlewares/rate-limit.middleware';
-import { HttpsRedirectMiddleware } from './middlewares/https-redirect.middleware';
+import { HelmetMiddleware } from './common/middlewares/helmet.middleware';
+import { RateLimitMiddleware } from './common/middlewares/rate-limit.middleware';
+import { HttpsRedirectMiddleware } from './common/middlewares/https-redirect.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './users/users.module';
