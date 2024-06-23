@@ -1,73 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Furniro Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A REST API used for the [Furniro e-commerce app](https://furniro-app.vercel.app/),designed to handle all server-side logic and database interactions for a furniture store application.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+#### Secure User Authentication
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+User authentication with Token-Based Authentication with JWT and a refresh token
 
-## Installation
+#### Product Catalog Management
 
-```bash
-$ npm install
+Products CRUD Operations: Full Create, Read, Update, and Delete (CRUD) capabilities for managing the product inventory, With that **Image Management** Supports uploading, storing, and retrieving product images, ensuring that visual data is managed effectively.
+
+#### Order Processing and Management
+
+Order Creation and Tracking that Enables customers to place orders, view order details, and track order status from processing to delivery.
+
+## Security and Best Practices
+
+- **Data Validation** and Sanitization: Validates and cleans input data to prevent SQL injection, XSS, and other vulnerabilities.
+
+- **Password Security**: Uses bcrypt to hash passwords, ensuring they are stored securely.
+
+- **Rate Limiting and Throttling**: Limits the number of client requests to prevent usage abuse.
+
+- **Error Handling and Logging**: Provides robust error handling with minimal error messages.
+
+## Built With
+
+- Node js
+- Nest js with Express js platform
+- TypeScript
+- MongoDB
+- Mongoose
+- Zod
+- Cloudinary
+- Handlebars
+- Multer
+- Nodemailer
+
+## Running Locally
+
+1.  Clone the repository:
+
+```
+git clone https://github.com/Abdalrhman-Almarakeby/furniro-backend.git
 ```
 
-## Running the app
+2.  Navigate to the project directory:
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+cd furniro-backend
 ```
 
-## Test
+3.  Install dependencies:
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+npm install
 ```
 
-## Support
+4. Create .env file with the essential data (Like the .env.example) in the root of the project.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+5. Start the local development server:
 
-## Stay in touch
+```
+npm run dev
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Contact
 
-## License
+Github: [Abdalrhman Almarakeby](https://github.com/Abdalrhman-Almarakeby)
 
-Nest is [MIT licensed](LICENSE).
+Linkedin :[Abdalrhman Almarakeby](https://www.linkedin.com/in/abdalrhman-almarakeby/)
+
+Email: almarakeby.work@gmail.com
